@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import mimetypes
-import re
 import unicodedata
 from pathlib import Path
 from typing import Literal
@@ -17,8 +16,6 @@ TEXT_INLINE_MAX = 200 * 1024
 _NAME_MAX = 128
 _NAME_MAX_BYTES = 200  # ext4 allows 255 bytes; leave room for the "<message_id>-" prefix
 _EXT_MAX = 16
-_FORBIDDEN = set('/\\:*?"<>|')
-_RESERVED = {"CON", "PRN", "AUX", "NUL"} | {f"{p}{i}" for p in ("COM", "LPT") for i in range(1, 10)}
 _IMAGE_MIMES = {"image/jpeg", "image/png", "image/webp", "image/gif"}
 _TEXT_EXTS = {".txt", ".md", ".csv", ".json", ".log"}
 
@@ -41,8 +38,8 @@ def safe_name(media: MediaInfo) -> str:
     if media.name is None:
         return _fallback(media)
     name = _strip(media.name)
-    name = re.split(r"[/\\]", name)[-1]
-    name = "".join(c for c in name if c not in _FORBIDDEN and unicodedata.category(c) != "Cc")
+    name = name.split("/")[-1]
+    name = "".join(c for c in name if unicodedata.category(c) != "Cc")
     if name.startswith(".") and name.count(".") == 1 and mimetypes.guess_type("x" + name)[0]:
         name = "file" + name  # ".pdf" is an extension without a name, not a hidden file
     else:
@@ -50,8 +47,6 @@ def safe_name(media: MediaInfo) -> str:
     base, ext = _split_ext(name)
     if not base.strip():
         base = "file"
-    if base.split(".")[0].upper() in _RESERVED:
-        base = "_" + base
     base = base[: _NAME_MAX - len(ext)]
     while len((base + ext).encode("utf-8")) > _NAME_MAX_BYTES:
         base = base[:-1]

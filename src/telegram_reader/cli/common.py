@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import logging
-import os
 import sys
 from collections.abc import Awaitable, Callable
 
@@ -51,8 +50,7 @@ def _log_failure() -> None:
     try:
         path.parent.mkdir(parents=True, exist_ok=True)
         handler = logging.FileHandler(path, encoding="utf-8")
-        if os.name != "nt":
-            path.chmod(0o600)
+        path.chmod(0o600)
     except OSError:
         return
     log.addHandler(handler)

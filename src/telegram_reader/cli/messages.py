@@ -35,7 +35,7 @@ NO_SECRET_STORE = Problem(
     what="No access to the secret store",
     why="telegram-reader keeps the session and keys in your system's secret store, and it is unavailable",
     todo=(
-        "macOS: unlock Keychain (Keychain Access). Windows: check Credential Manager. "
+        "macOS: unlock Keychain (Keychain Access). "
         "Linux: install and start gnome-keyring or KWallet (Secret Service)"
     ),
 )

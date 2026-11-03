@@ -1,7 +1,6 @@
 import asyncio
 import base64
 import logging
-import os
 import stat
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
@@ -383,8 +382,7 @@ def test_log_file_is_private(tmp_path):
     saved = (list(app.handlers), app.propagate, app.level, mcp_log.level)
     try:
         setup_logging(tmp_path / "t.log")
-        if os.name != "nt":
-            assert stat.S_IMODE((tmp_path / "t.log").stat().st_mode) == 0o600
+        assert stat.S_IMODE((tmp_path / "t.log").stat().st_mode) == 0o600
     finally:
         for h in app.handlers[len(saved[0]) :]:
             h.close()
@@ -736,9 +734,8 @@ async def test_download_saves_file_and_reports_meta(tmp_path):
     assert path.read_bytes() == b"pdf"
     assert len(out) == 1 and isinstance(out[0], TextContent)
     assert out[0].text == f"Saved: {path}\n📎 document: a.pdf · application/pdf · 3 B"
-    if os.name != "nt":
-        assert stat.S_IMODE(path.stat().st_mode) == 0o600
-        assert stat.S_IMODE(path.parent.stat().st_mode) == 0o700
+    assert stat.S_IMODE(path.stat().st_mode) == 0o600
+    assert stat.S_IMODE(path.parent.stat().st_mode) == 0o700
 
 
 async def test_download_by_title(tmp_path):
@@ -809,7 +806,6 @@ async def test_download_bad_message_id(tmp_path, message_id):
         await tools["download_file"](chat=1, message_id=message_id)
 
 
-@pytest.mark.skipif(os.name == "nt", reason="POSIX permissions")
 async def test_download_write_error_is_not_network_error(tmp_path):
     tools, _, _ = make_files(tmp_path, {(1, 412): (PDF, b"pdf")})
     (tmp_path / "1").mkdir(mode=0o500)
@@ -821,7 +817,6 @@ async def test_download_write_error_is_not_network_error(tmp_path):
         (tmp_path / "1").chmod(0o700)
 
 
-@pytest.mark.skipif(os.name == "nt", reason="POSIX permissions")
 async def test_download_unwritable_root_is_download_failed(tmp_path):
     root = tmp_path / "ro"
     root.mkdir(mode=0o500)
@@ -879,7 +874,6 @@ async def test_download_flags_injection_in_file_name(tmp_path):
     assert WARN_LINE not in clean_out[0].text
 
 
-@pytest.mark.skipif(os.name == "nt", reason="POSIX permissions")
 async def test_download_unreadable_chat_folder_is_download_failed(tmp_path):
     tools, _, _ = make_files(tmp_path, {(1, 412): (PDF, b"pdf")})
     (tmp_path / "1").mkdir(mode=0o000)
@@ -981,7 +975,6 @@ async def test_downloads_default_to_user_downloads_dir(monkeypatch, tmp_path):
     assert (tmp_path / "dl" / "1" / "412-a.pdf").read_bytes() == b"pdf"
 
 
-@pytest.mark.skipif(os.name == "nt", reason="POSIX permissions")
 async def test_download_root_created_private(tmp_path):
     root = tmp_path / "Downloads" / "telegram-reader"
     tools, _, _ = make_files(root, {(1, 412): (PDF, b"pdf")})

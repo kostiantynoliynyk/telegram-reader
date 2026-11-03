@@ -107,8 +107,7 @@ def setup_logging(path: Path | None = None) -> None:
     path = path or log_path()
     path.parent.mkdir(parents=True, exist_ok=True)
     handler = RotatingFileHandler(path, maxBytes=1_000_000, backupCount=3, encoding="utf-8")
-    if os.name != "nt":
-        path.chmod(0o600)
+    path.chmod(0o600)
     handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s"))
     log.addHandler(handler)
     log.setLevel(logging.INFO)
@@ -239,8 +238,7 @@ def _newest(msgs: list[MessageData]) -> list[MessageData]:
 
 
 def _private(path: Path, mode: int) -> None:
-    if os.name != "nt":
-        path.chmod(mode)
+    path.chmod(mode)
 
 
 def _private_dirs(root: Path, folder: Path) -> None:

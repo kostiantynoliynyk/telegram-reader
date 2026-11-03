@@ -9,7 +9,7 @@ Use it to search chat history, summarize a period, and find files and links that
   and by a guard in the Telegram client itself, which rejects every request except reads.
 - **Only the folders you choose.** You pick Telegram folders. Claude sees exactly what is in those folders and
   nothing else.
-- **Everything stays local.** The server runs on your computer (macOS, Windows or Linux). Telegram keys and the
+- **Everything stays local.** The server runs on your computer (macOS or Linux). Telegram keys and the
   session live in the system secret store, not in files.
 - **Everyone has their own setup.** Each person configures their own keys, their own session and their own
   folder selection.
@@ -43,13 +43,7 @@ You need: a Telegram account, **a phone with Telegram** at hand (to log in with 
 **Step 1. Install uv** (a Python project manager; no separate Python install needed).
 
 ```bash
-# macOS / Linux
 curl -LsSf https://astral.sh/uv/install.sh | sh
-```
-
-```powershell
-# Windows (PowerShell)
-powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
 After installing, open a **new** terminal and check `uv --version`.
@@ -155,7 +149,6 @@ renaming a folder does not break access.
 
 - macOS: `~/Library/Application Support/telegram-reader/config.toml`
 - Linux: `~/.config/telegram-reader/config.toml`
-- Windows: `%LOCALAPPDATA%\telegram-reader\config.toml`
 
 **Only the CLI** writes the config, and it is signed (the HMAC key is in the secret store). If you edit the file
 by hand, the server refuses with «Config was changed outside telegram-reader» until you run
@@ -297,11 +290,9 @@ file `telegram-reader.log`). It contains only service data: tool, chat ID, resul
 
 ## 10. Platforms
 
-macOS, Windows and Linux are supported.
+macOS and Linux are supported.
 
 - **macOS.** Secrets are in Keychain. If the system asks for Keychain access, click **Allow** / **Always Allow**.
-- **Windows.** Secrets are in Credential Manager. File permissions (config, log) come from the user profile
-  permissions: `chmod 600` has no effect on Windows, so do not share your profile with others.
 - **Linux.** Secrets are stored via Secret Service, so you need `gnome-keyring` or KWallet (with the service
   running). Without it, `setup` reports that there is no secret store. On headless servers without a graphical
   session, Secret Service is usually unavailable.
@@ -316,7 +307,7 @@ uv run pytest
 ```
 
 - Tests never use real Telegram. The Telethon client is replaced with fakes. On GitHub the tests run in CI on
-  macOS, Windows and Linux ([.github/workflows/tests.yml](.github/workflows/tests.yml)).
+  macOS and Linux ([.github/workflows/tests.yml](.github/workflows/tests.yml)).
 - Run the CLI from source: `uv run telegram-reader --help`.
 - Manual Claude Code registration (the `setup` wizard does this for you):
 

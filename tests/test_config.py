@@ -1,4 +1,3 @@
-import os
 from dataclasses import replace
 
 import pytest
@@ -84,8 +83,7 @@ def test_write_config_is_atomic_and_private(tmp_path):
     path = tmp_path / "config.toml"
     write_config(path, CFG, KEY)
     assert parse_config(path.read_text(encoding="utf-8"), KEY) == CFG
-    if os.name != "nt":
-        assert path.stat().st_mode & 0o777 == 0o600
+    assert path.stat().st_mode & 0o777 == 0o600
     assert list(tmp_path.iterdir()) == [path]
 
 

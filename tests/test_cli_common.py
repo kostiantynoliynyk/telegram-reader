@@ -1,4 +1,3 @@
-import os
 import sys
 
 import pytest
@@ -65,8 +64,7 @@ def test_unexpected_error_points_to_log(monkeypatch, capsys, tmp_path):
     assert f"Unexpected error. Details: {log}" in out.out
     assert "Traceback" not in out.out + out.err and "boom-secret" not in out.out + out.err
     assert "boom-secret" in log.read_text()
-    if os.name != "nt":
-        assert log.stat().st_mode & 0o777 == 0o600
+    assert log.stat().st_mode & 0o777 == 0o600
 
 
 def test_format_problem_three_parts():

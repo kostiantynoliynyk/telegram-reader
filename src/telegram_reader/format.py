@@ -25,7 +25,7 @@ LINK_WARN = "⚠ link text does not match the address"
 
 
 def local_tz() -> tzinfo:
-    """The system time zone with DST rules on macOS, Windows and Linux."""
+    """The system time zone with DST rules on macOS and Linux."""
     return tzlocal.get_localzone()
 
 

@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import os
 import shlex
 import shutil
 import subprocess
@@ -13,10 +12,7 @@ TIMEOUT_SECONDS = 30
 
 
 def find_claude() -> str | None:
-    found = shutil.which("claude")
-    if found is None and os.name == "nt":
-        found = shutil.which("claude.cmd")
-    return found
+    return shutil.which("claude")
 
 
 def server_command() -> list[str]:

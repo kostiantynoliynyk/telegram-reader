@@ -205,8 +205,7 @@ def write_config(path: Path, cfg: Config, key: bytes) -> None:
     try:
         with os.fdopen(fd, "w", encoding="utf-8") as f:
             f.write(text)
-        if os.name != "nt":
-            os.chmod(tmp, 0o600)
+        os.chmod(tmp, 0o600)
         os.replace(tmp, path)
     except BaseException:
         Path(tmp).unlink(missing_ok=True)

@@ -12,10 +12,6 @@ def test_safe_name_strips_path_and_hidden():
     assert safe_name(MediaInfo("document", name="../../.zshrc\u202e")) == "zshrc"
 
 
-def test_safe_name_strips_windows_path_and_forbidden_chars():
-    assert safe_name(MediaInfo("document", name='C:\\x\\a:b*c?"d<e>f|g.txt')) == "abcdefg.txt"
-
-
 def test_safe_name_truncates_keeping_extension():
     n = safe_name(MediaInfo("document", name="a" * 300 + ".xlsx"))
     assert len(n) == 128 and n.endswith(".xlsx")
@@ -28,10 +24,7 @@ def test_safe_name_fallbacks():
     assert safe_name(MediaInfo("document", name="///")) == "file"
 
 
-def test_safe_name_windows_reserved_and_bare_extension():
-    assert safe_name(MediaInfo("document", name="CON.txt")) == "_CON.txt"
-    assert safe_name(MediaInfo("document", name="nul")) == "_nul"
-    assert safe_name(MediaInfo("document", name="com1.tar.gz")) == "_com1.tar.gz"
+def test_safe_name_bare_extension():
     assert safe_name(MediaInfo("document", name=".pdf")) == "file.pdf"
 
 

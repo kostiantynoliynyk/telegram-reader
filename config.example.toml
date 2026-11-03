@@ -6,7 +6,6 @@
 # Location (platformdirs user_config_dir("telegram-reader")):
 #   macOS:   ~/Library/Application Support/telegram-reader/config.toml
 #   Linux:   ~/.config/telegram-reader/config.toml
-#   Windows: %LOCALAPPDATA%\telegram-reader\config.toml
 
 version = 2
 

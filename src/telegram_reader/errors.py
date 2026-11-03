@@ -37,7 +37,7 @@ class SessionRevoked(LoginRequired):
 
 
 SECRET_STORE_UNAVAILABLE = (
-    "No access to the secret store (Keychain / Credential Manager / Secret Service). "
+    "No access to the secret store (Keychain / Secret Service). "
     "Unlock it and try again"
 )
 

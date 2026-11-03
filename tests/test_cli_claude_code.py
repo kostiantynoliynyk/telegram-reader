@@ -37,18 +37,6 @@ def test_server_command_falls_back_to_python_module(monkeypatch):
     assert cc.server_command() == ["/py", "-m", "telegram_reader", "serve"]
 
 
-def test_find_claude_windows_cmd(monkeypatch):
-    monkeypatch.setattr(cc.os, "name", "nt")
-    monkeypatch.setattr(cc.shutil, "which", which({"claude.cmd": "C:\\claude.cmd"}))
-    assert cc.find_claude() == "C:\\claude.cmd"
-
-
-def test_find_claude_posix_does_not_try_cmd(monkeypatch):
-    monkeypatch.setattr(cc.os, "name", "posix")
-    monkeypatch.setattr(cc.shutil, "which", which({"claude.cmd": "x"}))
-    assert cc.find_claude() is None
-
-
 def test_register_failure_surfaces_stderr(monkeypatch):
     monkeypatch.setattr(cc.subprocess, "run", Run(1, b"boom happened"))
     monkeypatch.setattr(cc.shutil, "which", which({}))
