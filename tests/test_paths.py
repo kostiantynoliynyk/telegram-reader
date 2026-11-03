@@ -4,8 +4,8 @@ from telegram_reader import paths
 def test_config_and_log_paths_are_os_specific(monkeypatch):
     monkeypatch.setattr(paths.platformdirs, "user_config_dir", lambda *a, **k: "/cfg")
     monkeypatch.setattr(paths.platformdirs, "user_log_dir", lambda *a, **k: "/log")
-    assert str(paths.config_path()) == "/cfg/config.toml"
-    assert str(paths.log_path()) == "/log/telegram-reader.log"
+    assert paths.config_path().as_posix() == "/cfg/config.toml"
+    assert paths.log_path().as_posix() == "/log/telegram-reader.log"
 
 
 def _setup(tmp_path, monkeypatch):
@@ -48,4 +48,4 @@ def test_migrate_location_noop_when_same_or_absent(tmp_path, monkeypatch):
 
 def test_downloads_dir(monkeypatch):
     monkeypatch.setattr(paths.platformdirs, "user_downloads_dir", lambda *a, **k: "/dl")
-    assert str(paths.downloads_dir()) == "/dl/telegram-reader"
+    assert paths.downloads_dir().as_posix() == "/dl/telegram-reader"
