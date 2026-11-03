@@ -1,0 +1,38 @@
+[project]
+name = "telegram-reader"
+version = "0.1.0"
+description = "Read-only MCP server that lets Claude Code read whitelisted Telegram chats"
+requires-python = ">=3.12"
+dependencies = [
+    "mcp>=2.3,<3",
+    "telethon>=1.36,<2",  # tg.py overrides private TelegramClient._on_login
+    "keyring>=25",
+    "qrcode>=8",
+    "tomli-w>=1.2.0",
+    "platformdirs>=4.14.0",
+    "questionary>=2.1.1",
+    "rich>=15.0.0",
+    "tzlocal>=5.4.5",
+]
+
+[project.scripts]
+telegram-reader = "telegram_reader.__main__:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "pytest-asyncio>=0.24",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/telegram_reader"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+pythonpath = ["src"]
+testpaths = ["tests"]

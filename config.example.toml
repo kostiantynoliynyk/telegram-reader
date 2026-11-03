@@ -1,0 +1,29 @@
+# REFERENCE, not a template to copy.
+# Config v2 is created and signed by `telegram-reader setup` (or `folders`).
+# Do not edit it by hand: after a manual change the signature will not match and
+# the server will refuse to start until you run `telegram-reader folders`.
+#
+# Location (platformdirs user_config_dir("telegram-reader")):
+#   macOS:   ~/Library/Application Support/telegram-reader/config.toml
+#   Linux:   ~/.config/telegram-reader/config.toml
+#   Windows: %LOCALAPPDATA%\telegram-reader\config.toml
+
+version = 2
+
+[telegram]
+api_id = 12345678               # from my.telegram.org; api_hash lives in the secret store
+account_id = 987654321          # the account that owns the selected folders
+
+[access]
+folders = [{ id = 3, title = "Work" }]   # access by folder ID; title is for display only
+
+[features]
+write = false                   # sending messages is not available yet
+
+[limits]
+max_messages = 200              # max messages per request
+search_per_chat = 20            # max hits per chat when searching all chats
+download_max_mb = 50            # max file size to download, MB
+
+[signature]
+hmac = "…"                      # set by the CLI; the signing key is kept in the keyring
