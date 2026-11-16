@@ -17,6 +17,9 @@ Use it to search chat history, summarize a period, and find files and links that
 Tools Claude gets: `list_chats`, `get_messages`, `search_messages`, `get_context`, `download_file`,
 `list_files`, `list_links`.
 
+**See it work:** [an animated walkthrough of one tool call](https://kostiantynoliynyk.github.io/telegram-reader/)
+— the normal path, a chat that is not allowed, an ended session, search, download and an injection attempt.
+
 ---
 
 ## Contents
