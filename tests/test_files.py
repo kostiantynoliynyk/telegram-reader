@@ -19,7 +19,7 @@ def test_safe_name_truncates_keeping_extension():
 
 def test_safe_name_fallbacks():
     assert safe_name(MediaInfo("photo")) == "photo.jpg"
-    assert safe_name(MediaInfo("voice", mime="audio/ogg")) == "voice.oga"
+    assert safe_name(MediaInfo("voice", mime="audio/ogg")) == "voice.ogg"
     assert safe_name(MediaInfo("video")) == "video"
     assert safe_name(MediaInfo("document", name="///")) == "file"
 
