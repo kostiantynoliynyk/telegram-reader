@@ -20,6 +20,7 @@ telegram-reader = "telegram_reader.__main__:main"
 
 [dependency-groups]
 dev = [
+    "hypothesis>=6.170.15",
     "pytest>=8",
     "pytest-asyncio>=0.24",
 ]
