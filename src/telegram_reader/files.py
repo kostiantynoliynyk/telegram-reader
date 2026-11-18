@@ -20,6 +20,11 @@ _IMAGE_MIMES = {"image/jpeg", "image/png", "image/webp", "image/gif"}
 _TEXT_EXTS = {".txt", ".md", ".csv", ".json", ".log"}
 
 
+# mimetypes answers differently across Python versions for these (".oga" before 3.14,
+# ".ogg" from it), so the name of a voice message would depend on the interpreter.
+_EXT_BY_MIME = {"audio/ogg": ".ogg"}
+
+
 def _split_ext(name: str) -> tuple[str, str]:
     dot = name.rfind(".")
     if dot <= 0 or len(name) - dot > _EXT_MAX:  # a very long "extension" is just part of the name
@@ -30,7 +35,9 @@ def _split_ext(name: str) -> tuple[str, str]:
 def _fallback(media: MediaInfo) -> str:
     if media.kind == "photo":
         return "photo.jpg"
-    ext = mimetypes.guess_extension(media.mime) if media.mime else None
+    if not media.mime:
+        return media.kind
+    ext = _EXT_BY_MIME.get(media.mime) or mimetypes.guess_extension(media.mime)
     return media.kind + (ext or "")
 
 
