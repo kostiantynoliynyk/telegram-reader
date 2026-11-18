@@ -81,3 +81,15 @@ def test_detector_flags_attacks(text):
 ])
 def test_detector_ignores_normal_chat(text):
     assert not looks_like_injection(text)
+
+
+@pytest.mark.parametrize("limit", [0, -1, -5])
+def test_clip_never_exceeds_a_non_positive_limit(limit):
+    # Found by the Bend proof of law c1_clip_fits_the_limit: flat[: limit - 1] + "…" kept
+    # len(flat) characters for limit == 0 and more than that for a negative limit.
+    assert clip("abc", limit) == ""
+    assert clip("a​bc", limit) == f" {HIDDEN_MARK}"
+
+
+def test_clip_to_one_character_is_just_the_ellipsis():
+    assert clip("abc", 1) == "…"
