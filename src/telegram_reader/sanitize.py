@@ -52,7 +52,8 @@ def clip(text: str, limit: int) -> str:
     stripped = _strip(text)
     flat = " ".join(stripped.split())
     if len(flat) > limit:
-        flat = flat[: limit - 1] + "…"
+        # A limit below 1 has no room even for the "…".
+        flat = flat[: limit - 1] + "…" if limit > 0 else ""
     return f"{flat} {HIDDEN_MARK}" if stripped != text else flat
 
 
