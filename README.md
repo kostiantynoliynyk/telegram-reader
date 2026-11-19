@@ -280,6 +280,11 @@ file `telegram-reader.log`). It contains only service data: tool, chat ID, resul
   `telegram-reader` entry). The config holds only `api_id`.
 - **The session is visible to you.** In Telegram → Settings → Devices it shows up as `telegram-reader`, and you
   can end it at any time.
+- **The core rules are proven, not only tested.** The rules of folder access, the read-only guard, the peer guard
+  and hidden-character cleanup are written as 44 laws and proven for every input in
+  [Bend 2](https://bend-lang.com), over a small model of that logic. Tests then run the model and the real code
+  on the same random inputs and fail on any difference. [proofs/README.md](proofs/README.md) lists what is proven
+  and what is not.
 
 **Limits of the protection (honestly):**
 
@@ -290,6 +295,10 @@ file `telegram-reader.log`). It contains only service data: tool, chat ID, resul
   response structure or skew a summary. They cannot widen access. The markers, the ⚠ line and character cleanup
   reduce the risk but do not remove it: the detector is pattern-based, so a new phrasing can slip past it. That is
   why Claude acts in other tools only at your request and after confirmation.
+- The proofs cover a model of the access and read-only logic, not Telegram, Telethon or the network. They say
+  what the guards do with a request, not whether the lists of request names are right: a request whose name looks
+  like a read and that targets an allowed chat passes, whatever it does on Telegram's side. The server sends no
+  such request, and a test keeps it that way.
 
 ## 10. Platforms
 
@@ -311,6 +320,10 @@ uv run pytest
 
 - Tests never use real Telegram. The Telethon client is replaced with fakes. On GitHub the tests run in CI on
   macOS and Linux ([.github/workflows/tests.yml](.github/workflows/tests.yml)).
+- The security rules are proven in [proofs/](proofs/README.md). Check the proofs with `bend proofs/PROOF.bend`,
+  which must print `ALL PROOFS CHECK`; the `bend-proofs` job in CI does the same with a pinned Bend release.
+  A change in `access.py`, `tg.py`, `features.py` or `sanitize.py` needs the model in `proofs/model/` updated to
+  match. Without Bend installed, `tests/test_bend_model.py` is skipped locally.
 - Run the CLI from source: `uv run telegram-reader --help`.
 - Manual Claude Code registration (the `setup` wizard does this for you):
 
